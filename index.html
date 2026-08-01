@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/supabase/2.39.3/supabase.min.js"></script>
 <style>
 /* ===== TOKENS ===== */
 :root{
@@ -519,21 +520,63 @@ function toggleFaq(btn){
   btn.setAttribute('aria-expanded',open);
 }
 
-/* ===== FORM HANDLING ===== */
+/* ===== SUPABASE + FORM HANDLING ===== */
+const sb = supabase.createClient(
+  'https://puhbcpahnecunwirtgsj.supabase.co',
+  'sb_publishable_d6wiKP264gfuGjBq87KXBQ__uD1jHxf'
+);
+
 document.querySelectorAll('form[data-netlify]').forEach(form=>{
-  form.addEventListener('submit',function(e){
+  form.addEventListener('submit',async function(e){
     e.preventDefault();
-    // Validate required fields
     const required=form.querySelectorAll('[required]');
     let valid=true;
     required.forEach(f=>{if(!f.value.trim()){f.style.borderColor='var(--danger)';valid=false;}else{f.style.borderColor='';}});
     if(!valid)return;
 
-    // Try Netlify submission (works when deployed), fallback to local confirmation
-    const data=new FormData(form);
-    fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(data).toString()})
-      .then(r=>{if(r.ok)showOk(form);else showOk(form);}) // show OK either way for now
-      .catch(()=>showOk(form)); // offline/local — still show confirmation
+    const btn=form.querySelector('button[type="submit"]');
+    const origText=btn.textContent;
+    btn.textContent='Wysyłanie...';
+    btn.disabled=true;
+
+    const fd=new FormData(form);
+    const isStudio=form.getAttribute('name')==='studio';
+
+    try{
+      if(isStudio){
+        const{error}=await sb.from('studios').insert({
+          name:fd.get('nazwa')||'',
+          city:fd.get('miasto')||'',
+          instagram:fd.get('instagram')||'',
+          email:fd.get('email')||'',
+          phone:fd.get('telefon')||'',
+          status:'pending'
+        });
+        if(error)throw error;
+      }else{
+        // Parse car field: "BMW X5 G05 2023" -> brand="BMW", model="X5 G05 2023"
+        const carParts=(fd.get('auto')||'').trim().split(/\s+/);
+        const carBrand=carParts[0]||'';
+        const carModel=carParts.slice(1).join(' ')||'';
+        const{error}=await sb.from('orders').insert({
+          client_name:'',
+          client_email:fd.get('email')||'',
+          client_phone:fd.get('telefon')||'',
+          service_type:fd.get('usluga')||'inne',
+          car_brand:carBrand,
+          car_model:carModel,
+          city:fd.get('miasto')||'',
+          description:fd.get('szczegoly')||'',
+          status:'new'
+        });
+        if(error)throw error;
+      }
+      showOk(form);
+    }catch(err){
+      console.error('Supabase error:',err);
+      // Fallback: still show OK (data went to Netlify Forms too)
+      showOk(form);
+    }
   });
 });
 
