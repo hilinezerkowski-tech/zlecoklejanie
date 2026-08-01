@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gotowe — ZlecOklejanie.pl</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#101317;--surface:#181c22;--border:#262b33;--kosc:#e8e6e1;--chrom:#8a8f98;--limonka:#C8F04A;--limonka-dark:#a8cc2e;--radius:6px;--font:'Inter',system-ui,sans-serif}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);font-size:16px;line-height:1.65;color:var(--kosc);background:var(--bg);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:48px 40px;max-width:520px;width:90%;text-align:center}
+.icon{font-size:3.5rem;margin-bottom:16px}
+h1{font-size:1.4rem;font-weight:800;margin-bottom:12px}
+p{font-size:.95rem;color:var(--chrom);line-height:1.6;margin-bottom:8px}
+.back{display:inline-block;margin-top:24px;padding:12px 28px;background:var(--limonka);color:var(--bg);font-weight:700;font-size:.95rem;border-radius:var(--radius);text-decoration:none;transition:background .15s}
+.back:hover{background:var(--limonka-dark);text-decoration:none}
+.nav{position:fixed;top:0;left:0;right:0;background:rgba(16,19,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 0;z-index:100}
+.nav-inner{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;align-items:center}
+.nav-logo{font-size:1.15rem;font-weight:800;color:var(--kosc);letter-spacing:-.02em;text-decoration:none}
+.nav-logo span{color:var(--limonka)}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Zlec<span>Oklejanie</span>.pl</a>
+  </div>
+</nav>
+
+<div class="card" id="card">
+  <div class="icon">✓</div>
+  <h1 id="title">Dziękujemy!</h1>
+  <p id="msg">Twoje zgłoszenie zostało wysłane.</p>
+  <a href="/" class="back">← Wróć na stronę</a>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const type = params.get('t');
+if (type === 'zlecenie') {
+  document.getElementById('title').textContent = 'Zlecenie wysłane!';
+  document.getElementById('msg').textContent = 'Szukamy dla Ciebie studiów. Oferty otrzymasz na podany e-mail w ciągu 24–48h.';
+} else if (type === 'studio') {
+  document.getElementById('title').textContent = 'Zgłoszenie wysłane!';
+  document.getElementById('msg').textContent = 'Sprawdzimy Twoje studio i odezwiemy się w ciągu 48h.';
+}
+</script>
+
+</body>
+</html>
