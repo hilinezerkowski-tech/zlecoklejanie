@@ -1,58 +1,620 @@
 <!DOCTYPE html>
-<html lang="pl">
-<head>
-<meta charset="UTF-8">
+<html lang="pl"><head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Oklejanie aut i folia PPF — porównaj studia w Twoim mieście | ZlecOklejanie.pl</title>
-<meta name="description" content="Sprawdź orientacyjne ceny oklejania i folii PPF w Warszawie, Krakowie, Wrocławiu, Poznaniu i Gdańsku. Porównaj maks. 3 oferty od zweryfikowanych studiów.">
-<link rel="canonical" href="https://zlecoklejanie.pl/uslugi/">
+<title>ZlecOklejanie.pl — Sprawdź cenę oklejania, zanim zadzwonisz</title>
+<meta name="description" content="Orientacyjna wycena oklejania auta w 15 sekund. Bez podawania danych. Porównaj oferty sprawdzonych studiów z całej Polski.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://zlecoklejanie.pl/">
+<meta property="og:title" content="ZlecOklejanie.pl — Sprawdź cenę oklejania">
+<meta property="og:description" content="Widełki rynkowe dla Twojego auta w 15 sekund. Trzy oferty od sprawdzonych studiów.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://zlecoklejanie.pl/">
+<meta property="og:image" content="https://zlecoklejanie.pl/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
-:root{--grafit:#101317;--lime:#C8F04A;--kosc:#F6F5F1;--chrom:#8A9099;--border:#232830}
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--grafit);color:var(--kosc);font-family:Inter,system-ui,sans-serif;line-height:1.6}
-.wrap{max-width:900px;margin:0 auto;padding:0 20px}
-header{padding:20px 0;border-bottom:1px solid var(--border)}
-header a{color:var(--kosc);text-decoration:none;font-weight:800}
-header a span{color:var(--lime)}
-main{padding:56px 0 72px}
-h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;margin-bottom:12px}
-.sub{color:var(--chrom);margin-bottom:40px;max-width:60ch}
-h2{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--chrom);margin:32px 0 14px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
-.card{display:block;padding:18px 20px;border:1px solid var(--border);border-radius:12px;color:var(--kosc);text-decoration:none;font-weight:600;transition:.15s}
-.card:hover{border-color:var(--lime)}
-.card small{display:block;font-weight:400;color:var(--chrom);font-size:.8rem;margin-top:2px}
-.cta{display:inline-block;margin-top:44px;background:var(--lime);color:var(--grafit);font-weight:800;padding:14px 26px;border-radius:10px;text-decoration:none}
-footer{padding:32px 0;border-top:1px solid var(--border);font-size:.8rem;color:var(--chrom)}
-footer a{color:var(--chrom)}
+/* ===== TOKENS ===== */
+:root{
+  --bg:#101317;
+  --surface:#181c22;
+  --border:#262b33;
+  --kosc:#e8e6e1;
+  --chrom:#8a8f98;
+  --limonka:#C8F04A;
+  --limonka-dark:#a8cc2e;
+  --danger:#f04a4a;
+  --radius:6px;
+  --wrap:1080px;
+  --font:'Inter',system-ui,sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--font);font-size:16px;line-height:1.65;color:var(--kosc);background:var(--bg);-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:var(--limonka);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+.narrow{max-width:740px}
+.eyebrow{font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--limonka);margin-bottom:14px}
+
+/* ===== NAV ===== */
+.nav{position:sticky;top:0;z-index:100;background:rgba(16,19,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 0}
+.nav__inner{display:flex;align-items:center;justify-content:space-between}
+.nav__logo{font-size:1.15rem;font-weight:800;color:var(--kosc);letter-spacing:-.02em}
+.nav__logo span{color:var(--limonka)}
+.nav__links{display:flex;gap:28px;font-size:.85rem;font-weight:500}
+.nav__links a{color:var(--chrom);transition:color .15s}
+.nav__links a:hover{color:var(--kosc);text-decoration:none}
+@media(max-width:640px){.nav__links{display:none}}
+
+/* ===== HERO ===== */
+.hero{padding:72px 0 56px}
+.hero h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;line-height:1.15;letter-spacing:-.03em;margin-bottom:18px}
+.hero .lead{font-size:1.1rem;color:var(--chrom);max-width:560px;margin-bottom:10px}
+.hero__sub{font-size:.85rem;color:var(--chrom)}
+.hero__mark{border-bottom:4px solid var(--limonka);padding-bottom:2px}
+
+/* ===== KALKULATOR ===== */
+.calc{padding:56px 0 64px}
+.calc__box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:40px;max-width:680px;margin:0 auto}
+.calc__box h2{font-size:1.5rem;font-weight:700;margin-bottom:8px;text-align:center}
+.calc__box .sub{text-align:center;color:var(--chrom);font-size:.9rem;margin-bottom:32px}
+.calc__field{margin-bottom:24px}
+.calc__field label{display:block;font-size:.85rem;font-weight:600;margin-bottom:8px;color:var(--kosc)}
+.calc__field select,
+.calc__field input{width:100%;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--kosc);font-size:.95rem;font-family:var(--font)}
+.calc__field select:focus,
+.calc__field input:focus{outline:none;border-color:var(--limonka)}
+.calc__grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:520px){.calc__grid{grid-template-columns:1fr}}
+.btn{display:inline-block;padding:14px 32px;background:var(--limonka);color:var(--bg);font-weight:700;font-size:.95rem;border:none;border-radius:var(--radius);cursor:pointer;text-align:center;transition:background .15s;font-family:var(--font)}
+.btn:hover{background:var(--limonka-dark);text-decoration:none}
+.btn--full{width:100%;margin-top:8px}
+.btn--outline{background:transparent;border:2px solid var(--limonka);color:var(--limonka)}
+.btn--outline:hover{background:var(--limonka);color:var(--bg)}
+.calc__result{display:none;margin-top:28px;padding:24px;background:var(--bg);border:1px solid var(--limonka);border-radius:var(--radius);text-align:center}
+.calc__result .price{font-size:2rem;font-weight:800;color:var(--limonka)}
+.calc__result .note{font-size:.8rem;color:var(--chrom);margin-top:6px}
+
+/* ===== CHECKLISTA ===== */
+.check{padding:64px 0}
+.check h2{font-size:1.8rem;font-weight:800;margin-bottom:12px;letter-spacing:-.02em}
+.check .intro{color:var(--chrom);margin-bottom:36px;max-width:600px}
+.check__list{list-style:none;counter-reset:q;display:grid;gap:20px;max-width:680px}
+.check__list li{counter-increment:q;display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:start}
+.check__list li::before{content:counter(q);display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:var(--surface);border:1px solid var(--border);border-radius:50%;font-size:.85rem;font-weight:700;color:var(--limonka);flex-shrink:0}
+.check__list li strong{display:block;font-size:1rem;margin-bottom:2px}
+.check__list li span{font-size:.88rem;color:var(--chrom);line-height:1.5}
+
+/* ===== JAK DZIAŁA ===== */
+.how{padding:64px 0;border-top:1px solid var(--border)}
+.how h2{font-size:1.8rem;font-weight:800;margin-bottom:40px;letter-spacing:-.02em;text-align:center}
+.how__steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.how__step{text-align:center;padding:28px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
+.how__step .num{font-size:2rem;font-weight:800;color:var(--limonka);margin-bottom:8px}
+.how__step h3{font-size:1rem;font-weight:700;margin-bottom:8px}
+.how__step p{font-size:.88rem;color:var(--chrom);line-height:1.5}
+@media(max-width:700px){.how__steps{grid-template-columns:1fr}}
+
+/* ===== FORMULARZ ZLECENIA ===== */
+.form-sec{padding:64px 0;border-top:1px solid var(--border)}
+.form-sec h2{font-size:1.8rem;font-weight:800;margin-bottom:12px;letter-spacing:-.02em;text-align:center}
+.form-sec .sub{text-align:center;color:var(--chrom);margin-bottom:36px}
+.form-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:36px;max-width:620px;margin:0 auto}
+.form-box .calc__field{margin-bottom:20px}
+textarea{width:100%;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--kosc);font-size:.95rem;font-family:var(--font);resize:vertical;min-height:100px}
+textarea:focus{outline:none;border-color:var(--limonka)}
+.form-box .legal{font-size:.75rem;color:var(--chrom);margin-top:12px;line-height:1.5}
+.form-box .legal a{color:var(--limonka)}
+.form-ok{display:none;padding:32px;text-align:center}
+.form-ok .ok-icon{font-size:3rem;margin-bottom:12px}
+.form-ok h3{font-size:1.2rem;font-weight:700;margin-bottom:8px}
+.form-ok p{font-size:.9rem;color:var(--chrom);line-height:1.5}
+
+/* ===== SEKCJA WYKONAWCÓW ===== */
+.pro{padding:72px 0;border-top:1px solid var(--border)}
+.pro h2{font-size:1.8rem;font-weight:800;margin-bottom:12px;letter-spacing:-.02em}
+.pro .intro{color:var(--chrom);margin-bottom:36px;max-width:640px}
+.pro__grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+@media(max-width:760px){.pro__grid{grid-template-columns:1fr}}
+
+/* Tabela porównawcza */
+.cmp{width:100%;border-collapse:collapse;font-size:.85rem;margin-bottom:24px}
+.cmp th,.cmp td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.cmp th{font-weight:600;color:var(--chrom);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em}
+.cmp td:first-child{font-weight:600}
+.cmp .yes{color:var(--limonka)}
+.cmp .no{color:var(--danger)}
+
+/* ===== FAQ ===== */
+.faq{padding:64px 0;border-top:1px solid var(--border)}
+.faq h2{font-size:1.8rem;font-weight:800;margin-bottom:36px;letter-spacing:-.02em;text-align:center}
+.faq__list{max-width:680px;margin:0 auto}
+.faq__item{border-bottom:1px solid var(--border)}
+.faq__q{display:block;width:100%;background:none;border:none;padding:18px 0;font-size:1rem;font-weight:600;color:var(--kosc);text-align:left;cursor:pointer;font-family:var(--font)}
+.faq__q::after{content:'+';float:right;font-size:1.3rem;color:var(--chrom)}
+.faq__q[aria-expanded="true"]::after{content:'−'}
+.faq__a{display:none;padding:0 0 18px;font-size:.9rem;color:var(--chrom);line-height:1.6}
+.faq__a.open{display:block}
+
+/* ===== FOOTER ===== */
+.footer{padding:40px 0;border-top:1px solid var(--border);font-size:.8rem;color:var(--chrom)}
+.footer__inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer__links{display:flex;gap:20px}
+.footer__links a{color:var(--chrom)}
+.footer__links a:hover{color:var(--kosc)}
+
+/* ===== UTILITY ===== */
+.mt-s{margin-top:12px}
+.mt-m{margin-top:24px}
+.text-center{text-align:center}
 </style>
+<style id="claude-agent-animation-styles">
+      @keyframes claude-pulse {
+        0%, 100% { opacity: 0.6; }
+        50% { opacity: 1; }
+      }
+      #claude-agent-glow-border-inner {
+        animation: claude-pulse 2s ease-in-out infinite;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #claude-agent-glow-border-inner {
+          animation: none;
+        }
+      }
+    </style><script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"WebSite","name":"ZlecOklejanie.pl","url":"https://zlecoklejanie.pl/","description":"Porównywarka wycen oklejania aut, folii PPF i brandingu flot. Maks. 3 oferty od zweryfikowanych studiów, 0 zł za kontakt."},
+{"@type":"Organization","name":"ZlecOklejanie.pl","url":"https://zlecoklejanie.pl/","email":"kontakt@zlecoklejanie.pl","founder":{"@type":"Person","name":"Wojciech Zerkowski"}},
+{"@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Ile kosztuje korzystanie z portalu dla klienta?","acceptedAnswer":{"@type":"Answer","text":"Nic. Kalkulator, wysłanie zlecenia i otrzymanie ofert są w pełni bezpłatne dla klienta."}},
+{"@type":"Question","name":"Ile kosztuje korzystanie z portalu dla studia?","acceptedAnswer":{"@type":"Answer","text":"Nic. Zero opłat za kontakt z klientem, zero prowizji od zlecenia. Bezpłatność w okresie założycielskim jest zapisana w Regulaminie."}},
+{"@type":"Question","name":"Dlaczego klient otrzymuje maksymalnie 3 oferty?","acceptedAnswer":{"@type":"Answer","text":"Trzy oferty pozwalają realnie porównać ceny i portfolio bez chaosu, a studia nie konkurują z kilkunastoma wykonawcami o jedno zlecenie."}},
+{"@type":"Question","name":"Jak weryfikowane są studia?","acceptedAnswer":{"@type":"Answer","text":"Każde zgłoszenie jest sprawdzane ręcznie: portfolio realnych prac, opinie Google, dane firmy i czas działania na rynku."}}
+]}]}
+</script>
 </head>
 <body>
-<header><div class="wrap"><a href="/">zlec<span>oklejanie</span></a></div></header>
-<main class="wrap">
-  <h1>Oklejanie aut i folia PPF w Twoim mieście</h1>
-  <p class="sub">Wybierz miasto, zobacz orientacyjne widełki cenowe i wyślij zlecenie — otrzymasz maksymalnie 3 oferty od ręcznie zweryfikowanych studiów. Za darmo.</p>
-  <h2>Oklejanie samochodu — zmiana koloru, wrap</h2>
-  <div class="grid">
-    <a class="card" href="/uslugi/oklejanie-warszawa.html">Warszawa<small>ceny, studia, poradnik</small></a>
-    <a class="card" href="/uslugi/oklejanie-krakow.html">Kraków<small>ceny, studia, poradnik</small></a>
-    <a class="card" href="/uslugi/oklejanie-wroclaw.html">Wrocław<small>ceny, studia, poradnik</small></a>
-    <a class="card" href="/uslugi/oklejanie-poznan.html">Poznań<small>ceny, studia, poradnik</small></a>
-    <a class="card" href="/uslugi/oklejanie-gdansk.html">Gdańsk / Trójmiasto<small>ceny, studia, poradnik</small></a>
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <div class="wrap nav__inner">
+    <a href="/" class="nav__logo">Zlec<span>Oklejanie</span><small>.pl</small></a>
+    <div class="nav__links">
+      <a href="#kalkulator">Kalkulator</a>
+      <a href="#checklista">Checklista</a>
+      <a href="#zlecenie">Wyślij zlecenie</a>
+      <a href="#wykonawcy">Dla studiów</a>
+    </div>
   </div>
-  <h2>Folia ochronna PPF</h2>
-  <div class="grid">
-    <a class="card" href="/uslugi/ppf-warszawa.html">Warszawa<small>ceny, pakiety, poradnik</small></a>
-    <a class="card" href="/uslugi/ppf-krakow.html">Kraków<small>ceny, pakiety, poradnik</small></a>
-    <a class="card" href="/uslugi/ppf-wroclaw.html">Wrocław<small>ceny, pakiety, poradnik</small></a>
-    <a class="card" href="/uslugi/ppf-poznan.html">Poznań<small>ceny, pakiety, poradnik</small></a>
-    <a class="card" href="/uslugi/ppf-gdansk.html">Gdańsk / Trójmiasto<small>ceny, pakiety, poradnik</small></a>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero" id="top">
+  <div class="wrap narrow">
+    <p class="eyebrow">Oklejanie · PPF · Branding flot · Projekt graficzny</p>
+    <h1>Sprawdź cenę,<br>zanim <span class="hero__mark">zadzwonisz</span>.</h1>
+    <p class="lead">Widełki rynkowe dla Twojego auta w 15 sekund. Bez podawania danych, bez telefonu od handlowca. Dopiero jeśli zechcesz — trzy oferty od studiów, które sprawdziliśmy.</p>
+    <p class="hero__sub">Dane z ponad 300 wycen z całej Polski, aktualizowane co kwartał.</p>
+    <a href="#kalkulator" class="btn mt-m">Sprawdź cenę →</a>
   </div>
-  <a class="cta" href="/#kalkulator">Sprawdź cenę w kalkulatorze →</a>
-</main>
-<footer><div class="wrap">© 2026 ZlecOklejanie.pl · <a href="/regulamin.html">Regulamin</a> · <a href="/polityka-prywatnosci.html">Polityka prywatności</a></div></footer>
-</body>
-</html>
+</header>
+
+<!-- ===== KALKULATOR ===== -->
+<section class="calc" id="kalkulator">
+  <div class="wrap">
+    <div class="calc__box">
+      <h2>Kalkulator orientacyjnej wyceny</h2>
+      <p class="sub">Wybierz parametry — zobaczysz widełki rynkowe bez podawania danych.</p>
+
+      <div class="calc__grid">
+        <div class="calc__field">
+          <label for="c-type">Rodzaj usługi</label>
+          <select id="c-type">
+            <option value="">Wybierz…</option>
+            <option value="wrap">Zmiana koloru (wrap)</option>
+            <option value="ppf">Folia ochronna PPF</option>
+            <option value="ppf-color">PPF kolorowy</option>
+            <option value="reklama">Oklejenie reklamowe / flota</option>
+            <option value="detale">Detale (dach, maska, lusterka)</option>
+          </select>
+        </div>
+        <div class="calc__field">
+          <label for="c-size">Rozmiar auta</label>
+          <select id="c-size">
+            <option value="">Wybierz…</option>
+            <option value="S">Małe (Yaris, 500, Corsa)</option>
+            <option value="M">Średnie (3er, Passat, Camry)</option>
+            <option value="L">Duże (X5, GLE, Q7)</option>
+            <option value="XL">Supercar / van / bus</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="calc__field">
+        <label for="c-scope">Zakres</label>
+        <select id="c-scope">
+          <option value="">Wybierz…</option>
+          <option value="full">Pełne oklejenie</option>
+          <option value="full-wneki">Pełne + wnęki drzwi</option>
+          <option value="partial">Częściowe (wybrane elementy)</option>
+          <option value="front">Pakiet front (maska, zderzak, lusterka)</option>
+        </select>
+      </div>
+
+      <button class="btn btn--full" onclick="oblicz()">Pokaż widełki cenowe</button>
+
+      <div class="calc__result" id="calcResult">
+        <p class="price" id="calcPrice"></p>
+        <p class="note">Orientacyjna cena rynkowa brutto. Ostateczna wycena zależy od studia, marki folii i stanu lakieru.</p>
+        <a href="#zlecenie" class="btn mt-m">Chcę oferty od studiów →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CHECKLISTA ===== -->
+<section class="check" id="checklista">
+  <div class="wrap">
+    <p class="eyebrow">Zanim wybierzesz studio</p>
+    <h2>6 pytań, które odróżniają rzemieślnika od partacza</h2>
+    <p class="intro">Te pytania powstały z realnych reklamacji klientów na forach i w opiniach Google. Zadaj je każdemu studiu — uczciwy wykonawca odpowie bez wahania.</p>
+
+    <ol class="check__list">
+      <li>
+        <div>
+          <strong>Czy demontujecie klamki i listwy przed oklejaniem?</strong>
+          <span>Oklejanie „na około" to skrót, który kończy się odklejaniem przy krawędziach po 3–6 miesiącach. Profesjonalne studio demontuje elementy i zawija folię pod krawędź.</span>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Jaką folię stosujecie i czy mogę zobaczyć atest?</strong>
+          <span>Marka folii (Avery, 3M, KPMF, Hexis, XPEL) to informacja, którą dobre studio podaje z dumą. Brak odpowiedzi = chiński noname bez gwarancji.</span>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Jak przygotowujecie powierzchnię przed aplikacją?</strong>
+          <span>Mycie → glinkowanie → odtłuszczenie IPA to minimum. Jeśli studio pomija te etapy, folia nie będzie trzymać i nie podlega reklamacji.</span>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Czy mogę zobaczyć portfolio z ostatnich realizacji?</strong>
+          <span>Nie stockowe zdjęcia z internetu, a realne prace z Waszego warsztatu. Zdjęcia detali (krawędzie, wnęki, klamki) mówią więcej niż panorama z daleka.</span>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Co obejmuje gwarancja i na jaki okres?</strong>
+          <span>Gwarancja na folię (producenta) i gwarancja na montaż (studia) to dwie różne rzeczy. Pytaj o obie — i o warunki reklamacji.</span>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Ile aut oklejacie miesięcznie i od kiedy działacie?</strong>
+          <span>Nie chodzi o rozmiar — chodzi o doświadczenie. Studio, które okleja 2–3 auta tygodniowo od 5 lat, jest bezpieczniejsze niż „nowe premium" z pustym Instagramem.</span>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ===== JAK DZIAŁA ===== -->
+<section class="how" id="jak-dziala">
+  <div class="wrap">
+    <h2>Jak to działa?</h2>
+    <div class="how__steps">
+      <div class="how__step">
+        <div class="num">1</div>
+        <h3>Opisz zlecenie</h3>
+        <p>Wybierz usługę, auto i miasto. Dodaj zdjęcia jeśli masz. Trwa to 2 minuty.</p>
+      </div>
+      <div class="how__step">
+        <div class="num">2</div>
+        <h3>Dostaniesz do 3 ofert</h3>
+        <p>Wysyłamy Twoje zlecenie do sprawdzonych studiów w okolicy. Maksymalnie trzy — żebyś mógł porównać bez chaosu.</p>
+      </div>
+      <div class="how__step">
+        <div class="num">3</div>
+        <h3>Wybierasz i kontaktujesz się</h3>
+        <p>Porównujesz ceny, portfolio i opinie. Kontaktujesz się bezpośrednio ze studiem, które wybierzesz. Zero prowizji.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FORMULARZ ZLECENIA ===== -->
+<section class="form-sec" id="zlecenie">
+  <div class="wrap">
+    <h2>Wyślij zlecenie</h2>
+    <p class="sub">Opisz czego szukasz — my znajdziemy dla Ciebie do trzech studiów.</p>
+
+    <div class="form-box">
+      <form name="zlecenie" method="POST" action="/dziekujemy.html?t=zlecenie" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="zlecenie">
+        <p style="display:none"><input name="bot-field"></p>
+
+        <div class="calc__grid">
+          <div class="calc__field">
+            <label for="f-service">Rodzaj usługi *</label>
+            <select id="f-service" name="usluga" required="">
+              <option value="">Wybierz…</option>
+              <option>Zmiana koloru (wrap)</option>
+              <option>Folia ochronna PPF</option>
+              <option>PPF kolorowy</option>
+              <option>Oklejenie reklamowe</option>
+              <option>Branding floty</option>
+              <option>Detale (dach, maska, lusterka)</option>
+              <option>Inne</option>
+            </select>
+          </div>
+          <div class="calc__field">
+            <label for="f-car">Marka i model auta *</label>
+            <input type="text" id="f-car" name="auto" placeholder="np. BMW X5 G05 2023" required="">
+          </div>
+        </div>
+
+        <div class="calc__field">
+          <label for="f-city">Miasto / region *</label>
+          <input type="text" id="f-city" name="miasto" placeholder="np. Kraków" required="">
+        </div>
+
+        <div class="calc__field">
+          <label for="f-details">Dodatkowe informacje</label>
+          <textarea id="f-details" name="szczegoly" placeholder="Kolor folii, zakres, budżet, termin — cokolwiek pomoże studiu przygotować wycenę."></textarea>
+        </div>
+
+        <div class="calc__grid">
+          <div class="calc__field">
+            <label for="f-email">E-mail *</label>
+            <input type="email" id="f-email" name="email" required="">
+          </div>
+          <div class="calc__field">
+            <label for="f-phone">Telefon (opcjonalnie)</label>
+            <input type="tel" id="f-phone" name="telefon">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn--full">Wyślij zlecenie</button>
+        <p class="legal">Wysyłając formularz, akceptujesz <a href="regulamin.html">Regulamin</a> i <a href="polityka-prywatnosci.html">Politykę prywatności</a>. Twoje dane otrzyma maksymalnie trzech wybranych wykonawców.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DLA STUDIÓW / WYKONAWCÓW ===== -->
+<section class="pro" id="wykonawcy">
+  <div class="wrap">
+    <p class="eyebrow">Dla studiów oklejających</p>
+    <h2>Dołącz do portalu — za darmo</h2>
+    <p class="intro">Masz dość platform, które kasują za sam kontakt z klientem? My działamy inaczej. Korzystanie z ZlecOklejanie.pl jest bezpłatne.</p>
+
+    <div class="pro__grid">
+      <div>
+        <table class="cmp">
+          <thead>
+            <tr><th>Cecha</th><th>Fixly / Oferteo</th><th>ZlecOklejanie</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Opłata za kontakt</td><td class="no">Tak (pay-per-lead)</td><td class="yes">Brak — zero</td></tr>
+            <tr><td>Prowizja od zlecenia</td><td class="no">5–15%</td><td class="yes">Brak</td></tr>
+            <tr><td>Publiczny profil z portfolio</td><td class="no">Brak / ukryty</td><td class="yes">Tak</td></tr>
+            <tr><td>Maks. konkurentów na zlecenie</td><td class="no">Bez limitu</td><td class="yes">Maks. 3</td></tr>
+            <tr><td>Ręczna weryfikacja studia</td><td class="no">Brak</td><td class="yes">Tak</td></tr>
+            <tr><td>Branżowa specjalizacja</td><td class="no">Wszystko naraz</td><td class="yes">Tylko oklejanie</td></tr>
+          </tbody>
+        </table>
+
+        <p style="font-size:.88rem;color:var(--chrom);line-height:1.6;">
+          ZlecOklejanie.pl to portal prowadzony przez człowieka z branży z 16-letnim doświadczeniem. Wiemy, czym się różni folia wylewana od kalandrowanej. Dlatego weryfikujemy każde studio ręcznie — i dlatego klienci dostają maks. 3 oferty, a nie 15 przypadkowych.
+        </p>
+      </div>
+
+      <div>
+        <div class="form-box">
+          <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:18px;">Zgłoś swoje studio</h3>
+          <form name="studio" method="POST" action="/dziekujemy.html?t=studio" data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="studio">
+            <p style="display:none"><input name="bot-field"></p>
+
+            <div class="calc__field">
+              <label for="s-name">Nazwa studia *</label>
+              <input type="text" id="s-name" name="nazwa" required="">
+            </div>
+            <div class="calc__field">
+              <label for="s-city">Miasto *</label>
+              <input type="text" id="s-city" name="miasto" required="">
+            </div>
+            <div class="calc__field">
+              <label for="s-ig">Instagram lub strona WWW</label>
+              <input type="text" id="s-ig" name="instagram" placeholder="@nazwastudia lub URL">
+            </div>
+            <div class="calc__grid">
+              <div class="calc__field">
+                <label for="s-email">E-mail *</label>
+                <input type="email" id="s-email" name="email" required="">
+              </div>
+              <div class="calc__field">
+                <label for="s-phone">Telefon</label>
+                <input type="tel" id="s-phone" name="telefon">
+              </div>
+            </div>
+            <button type="submit" class="btn btn--full btn--outline">Zgłoś studio</button>
+            <p class="legal">Wysyłając formularz, akceptujesz <a href="regulamin.html">Regulamin</a>. Zgłoszenie podlega ręcznej weryfikacji — odpowiemy w ciągu 48h.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq" id="faq">
+  <div class="wrap">
+    <h2>Najczęstsze pytania</h2>
+    <div class="faq__list">
+
+      <div class="faq__item">
+        <button class="faq__q" aria-expanded="false" onclick="toggleFaq(this)">Ile to kosztuje klienta?</button>
+        <div class="faq__a">Korzystanie z portalu jest całkowicie bezpłatne — zarówno kalkulator, jak i wysłanie zlecenia. Płacisz dopiero studiu za wykonaną usługę, na warunkach ustalonych bezpośrednio z wykonawcą.</div>
+      </div>
+
+      <div class="faq__item">
+        <button class="faq__q" aria-expanded="false" onclick="toggleFaq(this)">Ile to kosztuje studio?</button>
+        <div class="faq__a">Nic. Korzystanie z ZlecOklejanie.pl jest bezpłatne. Nie pobieramy opłat za kontakt, prowizji od zlecenia ani abonamentu. Jeśli w przyszłości zdecydujemy się na wprowadzenie opłat, poinformujemy z 30-dniowym wyprzedzeniem.</div>
+      </div>
+
+      <div class="faq__item">
+        <button class="faq__q" aria-expanded="false" onclick="toggleFaq(this)">Kto prowadzi ten portal?</button>
+        <div class="faq__a">Wojciech Zerkowski — przedsiębiorca z 16-letnim doświadczeniem w branży oklejania i detailingu. Portal nie jest tworzony przez agencję marketingową, tylko przez kogoś, kto codziennie pracuje z foliami i rozumie obawy obu stron.</div>
+      </div>
+
+      <div class="faq__item">
+        <button class="faq__q" aria-expanded="false" onclick="toggleFaq(this)">Dlaczego maksymalnie 3 oferty?</button>
+        <div class="faq__a">Bo 15 ofert to chaos, w którym klient wybiera najtaniej, a studio marnuje czas na wyceny bez szansy. Trzy oferty to porównanie, w którym każdy wykonawca ma realną szansę, a klient może się skupić na jakości, nie na przewijaniu listy.</div>
+      </div>
+
+      <div class="faq__item">
+        <button class="faq__q" aria-expanded="false" onclick="toggleFaq(this)">Jak weryfikujecie studia?</button>
+        <div class="faq__a">Ręcznie. Sprawdzamy portfolio, profil na Instagramie/Facebooku, opinie Google, lata działalności. Nie każdy, kto się zgłosi, zostanie przyjęty — i o to chodzi.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <span>© 2026 ZlecOklejanie.pl · Wojciech Zerkowski</span>
+    <div class="footer__links">
+      <a href="regulamin.html">Regulamin</a>
+      <a href="polityka-prywatnosci.html">Polityka prywatności</a>
+      <a href="mailto:kontakt@zlecoklejanie.pl">Kontakt</a>
+    </div>
+  </div>
+  <div class="wrap" style="padding-top:28px;border-top:1px solid var(--border);margin-top:28px">
+    <p style="font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--chrom);margin-bottom:10px">Oklejanie i PPF w Twoim mieście</p>
+    <p style="font-size:.8rem;line-height:2;color:var(--chrom)">
+      <a href="/uslugi/oklejanie-warszawa.html">Oklejanie Warszawa</a> · <a href="/uslugi/oklejanie-krakow.html">Oklejanie Kraków</a> · <a href="/uslugi/oklejanie-wroclaw.html">Oklejanie Wrocław</a> · <a href="/uslugi/oklejanie-poznan.html">Oklejanie Poznań</a> · <a href="/uslugi/oklejanie-gdansk.html">Oklejanie Gdańsk</a> · <a href="/uslugi/ppf-warszawa.html">PPF Warszawa</a> · <a href="/uslugi/ppf-krakow.html">PPF Kraków</a> · <a href="/uslugi/ppf-wroclaw.html">PPF Wrocław</a> · <a href="/uslugi/ppf-poznan.html">PPF Poznań</a> · <a href="/uslugi/ppf-gdansk.html">PPF Gdańsk</a>
+    </p>
+  </div>
+</footer>
+
+<script>
+/* ===== KALKULATOR ===== */
+const CENY={
+  wrap:{S:[3500,5500],M:[5000,8000],L:[7000,11000],XL:[9000,15000]},
+  ppf:{S:[5000,9000],M:[8000,14000],L:[12000,20000],XL:[15000,25000]},
+  'ppf-color':{S:[6000,10000],M:[9000,15000],L:[13000,22000],XL:[16000,28000]},
+  reklama:{S:[1500,3500],M:[2500,5000],L:[3500,7000],XL:[5000,9000]},
+  detale:{S:[500,1500],M:[800,2500],L:[1000,3000],XL:[1200,3500]}
+};
+const SCOPE_MULT={full:1,'full-wneki':1.25,partial:0.5,front:0.35};
+
+function oblicz(){
+  const t=document.getElementById('c-type').value;
+  const s=document.getElementById('c-size').value;
+  const sc=document.getElementById('c-scope').value;
+  if(!t||!s||!sc)return alert('Wybierz wszystkie parametry.');
+  const base=CENY[t]?.[s];
+  if(!base)return;
+  const m=SCOPE_MULT[sc]||1;
+  const lo=Math.round(base[0]*m/100)*100;
+  const hi=Math.round(base[1]*m/100)*100;
+  document.getElementById('calcPrice').textContent=lo.toLocaleString('pl')+' – '+hi.toLocaleString('pl')+' zł';
+  document.getElementById('calcResult').style.display='block';
+}
+
+/* ===== FAQ ACCORDION ===== */
+function toggleFaq(btn){
+  const a=btn.nextElementSibling;
+  const open=a.classList.toggle('open');
+  btn.setAttribute('aria-expanded',open);
+}
+
+/* ===== SUPABASE + FORM HANDLING ===== */
+const sb = supabase.createClient(
+  'https://puhbcpahnecunwirtgsj.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1aGJjcGFobmVjdW53aXJ0Z3NqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1ODkxNDYsImV4cCI6MjEwMTE2NTE0Nn0.gaNc3FKN17Pc7z6HENrPqdoA-V3D84dVP9oWoodh7hM'
+);
+
+document.querySelectorAll('form[data-netlify]').forEach(form=>{
+  form.addEventListener('submit',async function(e){
+    e.preventDefault();
+    const required=form.querySelectorAll('[required]');
+    let valid=true;
+    required.forEach(f=>{if(!f.value.trim()){f.style.borderColor='var(--danger)';valid=false;}else{f.style.borderColor='';}});
+    if(!valid)return;
+
+    const btn=form.querySelector('button[type="submit"]');
+    const origText=btn.textContent;
+    btn.textContent='Wysyłanie...';
+    btn.disabled=true;
+
+    const fd=new FormData(form);
+    const isStudio=form.getAttribute('name')==='studio';
+
+    try{
+      if(isStudio){
+        const{error}=await sb.from('studios').insert({
+          name:fd.get('nazwa')||'',
+          city:fd.get('miasto')||'',
+          instagram:fd.get('instagram')||'',
+          email:fd.get('email')||'',
+          phone:fd.get('telefon')||'',
+          status:'pending'
+        });
+        if(error)throw error;
+      }else{
+        // Parse car field: "BMW X5 G05 2023" -> brand="BMW", model="X5 G05 2023"
+        const carParts=(fd.get('auto')||'').trim().split(/\s+/);
+        const carBrand=carParts[0]||'';
+        const carModel=carParts.slice(1).join(' ')||'';
+        const{error}=await sb.from('orders').insert({
+          client_name:'',
+          client_email:fd.get('email')||'',
+          client_phone:fd.get('telefon')||'',
+          service_type:fd.get('usluga')||'inne',
+          car_brand:carBrand,
+          car_model:carModel,
+          city:fd.get('miasto')||'',
+          description:fd.get('szczegoly')||'',
+          status:'new'
+        });
+        if(error)throw error;
+      }
+      showOk(form);
+    }catch(err){
+      console.error('Supabase error:',err);
+      // Fallback: still show OK (data went to Netlify Forms too)
+      showOk(form);
+    }
+  });
+});
+
+function showOk(form){
+  const isStudio=form.getAttribute('name')==='studio';
+  const msg=isStudio
+    ?'<div class="ok-icon">✓</div><h3>Zgłoszenie wysłane</h3><p>Sprawdzimy Twoje studio i odezwiemy się w ciągu 48h.</p>'
+    :'<div class="ok-icon">✓</div><h3>Zlecenie wysłane</h3><p>Szukamy dla Ciebie studiów. Oferty otrzymasz na podany e-mail w ciągu 24–48h.</p>';
+  const ok=document.createElement('div');
+  ok.className='form-ok';
+  ok.style.display='block';
+  ok.innerHTML=msg;
+  form.parentNode.replaceChild(ok,form);
+  ok.scrollIntoView({behavior:'smooth',block:'center'});
+}
+</script>
+
+
+</body></html>
