@@ -1,0 +1,9 @@
+# Redirect zlecoklejenie.pl to zlecoklejanie.pl
+https://zlecoklejenie.pl/* https://zlecoklejanie.pl/:splat 301!
+https://www.zlecoklejenie.pl/* https://zlecoklejanie.pl/:splat 301!
+
+# Force HTTPS
+http://zlecoklejanie.pl/* https://zlecoklejanie.pl/:splat 301!
+
+# www to non-www
+https://www.zlecoklejanie.pl/* https://zlecoklejanie.pl/:splat 301!
