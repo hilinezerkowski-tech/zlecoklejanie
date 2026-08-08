@@ -633,7 +633,7 @@ const sb = supabase.createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1aGJjcGFobmVjdW53aXJ0Z3NqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1ODkxNDYsImV4cCI6MjEwMTE2NTE0Nn0.gaNc3FKN17Pc7z6HENrPqdoA-V3D84dVP9oWoodh7hM'
 );
 
-document.querySelectorAll('form[data-netlify]').forEach(form=>{
+document.querySelectorAll('form[name=zlecenie],form[name=studio],form[name=grafik]').forEach(form=>{
   form.addEventListener('submit',async function(e){
     e.preventDefault();
     const required=form.querySelectorAll('[required]');
