@@ -205,6 +205,7 @@ textarea:focus{outline:none;border-color:var(--limonka)}
       <a href="#checklista">Checklista</a>
       <a href="#zlecenie">Wyślij zlecenie</a>
       <a href="#wykonawcy">Dla studiów</a>
+      <a href="#grafik">Dla grafików</a>
     </div>
   </div>
 </nav>
@@ -366,6 +367,7 @@ textarea:focus{outline:none;border-color:var(--limonka)}
               <option>PPF kolorowy</option>
               <option>Oklejenie reklamowe</option>
               <option>Branding floty</option>
+              <option>Projekt graficzny</option>
               <option>Detale (dach, maska, lusterka)</option>
               <option>Inne</option>
             </select>
@@ -384,6 +386,13 @@ textarea:focus{outline:none;border-color:var(--limonka)}
         <div class="calc__field">
           <label for="f-details">Dodatkowe informacje</label>
           <textarea id="f-details" name="szczegoly" placeholder="Kolor folii, zakres, budżet, termin — cokolwiek pomoże studiu przygotować wycenę."></textarea>
+        </div>
+
+        <div class="calc__field">
+          <label style="display:flex;align-items:flex-start;gap:10px;font-weight:400;cursor:pointer;">
+            <input type="checkbox" name="potrzebuje_grafika" value="tak" style="margin-top:3px;flex-shrink:0;">
+            <span>Nie mam projektu graficznego — dobierzcie mi także grafika od pojazdów.<br><small style="color:var(--chrom);">Jeśli zaznaczasz: w polu wyżej opisz co reklamujesz, kolory firmowe i czy masz logo.</small></span>
+          </label>
         </div>
 
         <div class="calc__grid">
@@ -424,6 +433,7 @@ textarea:focus{outline:none;border-color:var(--limonka)}
             <tr><td>Maks. konkurentów na zlecenie</td><td class="no">Bez limitu</td><td class="yes">Maks. 3</td></tr>
             <tr><td>Ręczna weryfikacja studia</td><td class="no">Brak</td><td class="yes">Tak</td></tr>
             <tr><td>Branżowa specjalizacja</td><td class="no">Wszystko naraz</td><td class="yes">Tylko oklejanie</td></tr>
+            <tr><td>Grafik od pojazdów w pakiecie</td><td class="no">Brak</td><td class="yes">Tak</td></tr>
           </tbody>
         </table>
 
@@ -462,6 +472,68 @@ textarea:focus{outline:none;border-color:var(--limonka)}
               </div>
             </div>
             <button type="submit" class="btn btn--full btn--outline">Zgłoś studio</button>
+            <p class="legal">Wysyłając formularz, akceptujesz <a href="regulamin.html">Regulamin</a>. Zgłoszenie podlega ręcznej weryfikacji — odpowiemy w ciągu 48h.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DLA GRAFIKÓW ===== -->
+<section class="pro" id="grafik">
+  <div class="wrap">
+    <p class="eyebrow">Dla grafików projektujących na pojazdy</p>
+    <h2>Projektujesz grafiki na auta? Dołącz — za darmo</h2>
+    <p class="intro">Każde zlecenie reklamowe zaczyna się od projektu. Łączymy Cię z klientami, którzy potrzebują grafiki na auto lub flotę — zanim trafią do studia oklejającego.</p>
+
+    <div class="pro__grid">
+      <div>
+        <p style="font-size:.95rem;line-height:1.7;">
+          <strong>Jak to działa?</strong><br>
+          Klient wysyła zlecenie z briefem: co reklamuje, kolory firmowe, logo, model auta. Ty dostajesz komplet informacji i kontaktujesz się bezpośrednio. Maksymalnie 3 grafików na zlecenie — bez licytacji w dół, bez prowizji, bez opłat za kontakt.
+        </p>
+        <p style="font-size:.88rem;color:var(--chrom);line-height:1.6;">
+          Szukamy grafików, którzy rozumieją specyfikę projektowania na pojazdy: krzywizny, podziały blach, przetłoczenia, przygotowanie brytów do druku. Portfolio z realizacjami na autach jest warunkiem przyjęcia.
+        </p>
+      </div>
+
+      <div>
+        <div class="form-box">
+          <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:18px;">Zgłoś się jako grafik</h3>
+          <form name="grafik" method="POST" action="/dziekujemy.html?t=grafik" data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="grafik">
+            <p style="display:none"><input name="bot-field"></p>
+
+            <div class="calc__field">
+              <label for="g-name">Imię i nazwisko lub nazwa studia graficznego *</label>
+              <input type="text" id="g-name" name="nazwa" required="">
+            </div>
+            <div class="calc__field">
+              <label for="g-portfolio">Portfolio (Behance / Instagram / WWW) *</label>
+              <input type="text" id="g-portfolio" name="portfolio" placeholder="Link do prac — najlepiej z realizacjami na autach" required="">
+            </div>
+            <div class="calc__field">
+              <label for="g-spec">Specjalizacja</label>
+              <select id="g-spec" name="specjalizacja">
+                <option value="">Wybierz…</option>
+                <option>Oklejenia reklamowe</option>
+                <option>Branding flot</option>
+                <option>Projekty artystyczne / zmiana koloru</option>
+                <option>Pełen zakres</option>
+              </select>
+            </div>
+            <div class="calc__grid">
+              <div class="calc__field">
+                <label for="g-email">E-mail *</label>
+                <input type="email" id="g-email" name="email" required="">
+              </div>
+              <div class="calc__field">
+                <label for="g-phone">Telefon</label>
+                <input type="tel" id="g-phone" name="telefon">
+              </div>
+            </div>
+            <button type="submit" class="btn btn--full btn--outline">Zgłoś się</button>
             <p class="legal">Wysyłając formularz, akceptujesz <a href="regulamin.html">Regulamin</a>. Zgłoszenie podlega ręcznej weryfikacji — odpowiemy w ciągu 48h.</p>
           </form>
         </div>
@@ -570,60 +642,46 @@ document.querySelectorAll('form[data-netlify]').forEach(form=>{
     if(!valid)return;
 
     const btn=form.querySelector('button[type="submit"]');
-    const origText=btn.textContent;
     btn.textContent='Wysyłanie...';
     btn.disabled=true;
 
     const fd=new FormData(form);
-    const isStudio=form.getAttribute('name')==='studio';
+    const kind=form.getAttribute('name');
+    let sent=false;
 
+    // Kanał 1: Netlify Forms (powiadomienia e-mail, panel Netlify)
     try{
-      if(isStudio){
-        const{error}=await sb.from('studios').insert({
-          name:fd.get('nazwa')||'',
-          city:fd.get('miasto')||'',
-          instagram:fd.get('instagram')||'',
-          email:fd.get('email')||'',
-          phone:fd.get('telefon')||'',
-          status:'pending'
-        });
-        if(error)throw error;
-      }else{
-        // Parse car field: "BMW X5 G05 2023" -> brand="BMW", model="X5 G05 2023"
-        const carParts=(fd.get('auto')||'').trim().split(/\s+/);
-        const carBrand=carParts[0]||'';
-        const carModel=carParts.slice(1).join(' ')||'';
-        const{error}=await sb.from('orders').insert({
-          client_name:'',
-          client_email:fd.get('email')||'',
-          client_phone:fd.get('telefon')||'',
-          service_type:fd.get('usluga')||'inne',
-          car_brand:carBrand,
-          car_model:carModel,
-          city:fd.get('miasto')||'',
-          description:fd.get('szczegoly')||'',
-          status:'new'
-        });
-        if(error)throw error;
-      }
-      showOk(form);
-    }catch(err){
-      console.error('Supabase error:',err);
-      // Fallback: still show OK (data went to Netlify Forms too)
-      showOk(form);
+      const res=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(fd).toString()});
+      if(res.ok)sent=true;
+    }catch(err){console.error('Netlify Forms error:',err);}
+
+    // Kanał 2: Supabase landing_leads (skrzynka leadów, tylko INSERT dla anon)
+    try{
+      const payload={};fd.forEach((v,k)=>{if(k!=='bot-field'&&k!=='form-name')payload[k]=v;});
+      const{error}=await sb.from('landing_leads').insert({kind:kind,payload:payload});
+      if(error)throw error;
+      sent=true;
+    }catch(err){console.error('Supabase error:',err);}
+
+    if(sent){showOk(form,kind);}
+    else{
+      btn.textContent='Błąd — spróbuj ponownie';
+      btn.disabled=false;
+      setTimeout(()=>{btn.textContent=kind==='zlecenie'?'Wyślij zlecenie':(kind==='grafik'?'Zgłoś się':'Zgłoś studio');},4000);
     }
   });
 });
 
-function showOk(form){
-  const isStudio=form.getAttribute('name')==='studio';
-  const msg=isStudio
-    ?'<div class="ok-icon">✓</div><h3>Zgłoszenie wysłane</h3><p>Sprawdzimy Twoje studio i odezwiemy się w ciągu 48h.</p>'
-    :'<div class="ok-icon">✓</div><h3>Zlecenie wysłane</h3><p>Szukamy dla Ciebie studiów. Oferty otrzymasz na podany e-mail w ciągu 24–48h.</p>';
+function showOk(form,kind){
+  const msgs={
+    zlecenie:'<div class="ok-icon">\u2713</div><h3>Zlecenie wysłane</h3><p>Szukamy dla Ciebie studiów. Oferty otrzymasz na podany e-mail w ciągu 24\u201348h.</p>',
+    studio:'<div class="ok-icon">\u2713</div><h3>Zgłoszenie wysłane</h3><p>Sprawdzimy Twoje studio i odezwiemy się w ciągu 48h.</p>',
+    grafik:'<div class="ok-icon">\u2713</div><h3>Zgłoszenie wysłane</h3><p>Sprawdzimy Twoje portfolio i odezwiemy się w ciągu 48h.</p>'
+  };
   const ok=document.createElement('div');
   ok.className='form-ok';
   ok.style.display='block';
-  ok.innerHTML=msg;
+  ok.innerHTML=msgs[kind]||msgs.zlecenie;
   form.parentNode.replaceChild(ok,form);
   ok.scrollIntoView({behavior:'smooth',block:'center'});
 }
